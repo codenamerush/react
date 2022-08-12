@@ -6,15 +6,25 @@ function AllMeetupsPage() {
   const [loadedMeetups, setLoadedMeetups] = useState([])
 
   useEffect(() => {
+    setIsLoading(true);
     fetch(
       "https://react-tutorial-634da-default-rtdb.firebaseio.com/meetups.json"
     ).then((result) => {
       return  result.json();
     }).then(response => {
       setIsLoading(false);
-      setLoadedMeetups([response["-N9GhlQ_cPTFTC1NNqGN"]])
+      setLoadedMeetups(loadTheData(response))
     });
   }, []);
+
+  function loadTheData(meetups) {
+    const meets = [];
+    for (const keys in meetups) {
+      meetups[keys].id = keys;
+      meets.push(meetups[keys]);
+    }
+    return meets;
+  }
 
   if(isLoading) {
     return (
